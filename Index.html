@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physics Formulas with Fun Calculator</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffeb3b;
+    }
+    header {
+      background-color: #333;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background-color: #333;
+      color: white;
+    }
+    .top-bar a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    .container {
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    td {
+      background-color: #f2f2f2;
+    }
+    .form-container {
+      background-color: #fff;
+      padding: 20px;
+      margin-top: 30px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .calculator {
+      background-color: #ff4081;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+    .calculator input,
+    .calculator select {
+      padding: 10px;
+      font-size: 18px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+    }
+    .calculator button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 20px;
+      font-size: 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .calculator button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 15px;
+      font-size: 24px;
+      color: #333;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Physics Formulas with Fun Calculator</h1>
+  </header>
+
+  <div class="top-bar">
+    <div>Made by Barbalat Bogdan</div>
+    <a href="https://www.paypal.com/paypalme/buymekebab?country.x=MD&locale.x=en_US" target="_blank">Donate for a kebab</a>
+  </div>
+
+  <div class="container">
+    <table id="formulas-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Name</th>
+          <th onclick="sortTable(1)">Symbol</th>
+          <th onclick="sortTable(2)">Unit</th>
+          <th onclick="sortTable(3)">Formula</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Average Speed</td>
+          <td>S</td>
+          <td>m/s</td>
+          <td>S = d / t</td>
+        </tr>
+        <tr>
+          <td>Acceleration</td>
+          <td>a</td>
+          <td>m/s²</td>
+          <td>a = (v - u) / t</td>
+        </tr>
+        <tr>
+          <td>Density</td>
+          <td>ρ</td>
+          <td>kg/m³</td>
+          <td>ρ = m / V</td>
+        </tr>
+        <tr>
+          <td>Power</td>
+          <td>P</td>
+          <td>W</td>
+          <td>P = W / t</td>
+        </tr>
+        <tr>
+          <td>Newton’s Second Law</td>
+          <td>F</td>
+          <td>N</td>
+          <td>F = m × a</td>
+        </tr>
+        <tr>
+          <td>Weight</td>
+          <td>W</td>
+          <td>kg·m/s² (N)</td>
+          <td>W = m × g</td>
+        </tr>
+        <tr>
+          <td>Pressure</td>
+          <td>P</td>
+          <td>Pa</td>
+          <td>P = F / A</td>
+        </tr>
+        <tr>
+          <td>Ohm’s Law</td>
+          <td>V</td>
+          <td>V</td>
+          <td>V = I × R</td>
+        </tr>
+        <tr>
+          <td>Kinetic Energy</td>
+          <td>K.E.</td>
+          <td>J</td>
+          <td>K.E. = ½ mv²</td>
+        </tr>
+        <tr>
+          <td>Frequency</td>
+          <td>F</td>
+          <td>Hz</td>
+          <td>F = v / λ</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="calculator">
+      <h2>Fun Calculator</h2>
+      <select id="formula-select">
+        <option value="speed">Speed (S = d / t)</option>
+        <option value="acceleration">Acceleration (a = (v - u) / t)</option>
+        <option value="density">Density (ρ = m / V)</option>
+        <option value="power">Power (P = W / t)</option>
+        <option value="force">Force (F = m × a)</option>
+        <option value="weight">Weight (W = m × g)</option>
+      </select>
+      <div id="input-fields">
+        <!-- Input fields will be dynamically generated here -->
+      </div>
+      <button onclick="calculate()">Calculate</button>
+      <div class="result" id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    const formulaSelect = document.getElementById("formula-select");
+    const inputFields = document.getElementById("input-fields");
+    const resultDiv = document.getElementById("result");
+
+    formulaSelect.addEventListener("change", updateInputFields);
+    updateInputFields();
+
+    function updateInputFields() {
+      const selectedFormula = formulaSelect.value;
+      inputFields.innerHTML = ''; // Clear previous inputs
+
+      if (selectedFormula === 'speed') {
+        inputFields.innerHTML = `
+          <label for="distance">Distance (d):</label>
+          <input type="number" id="distance" placeholder="Distance in meters" required>
+          <label for="time">Time (t):</label>
+          <input type="number" id="time" placeholder="Time in seconds" required>
+        `;
+      } else if (selectedFormula === 'acceleration') {
+        inputFields.innerHTML = `
+          <label for="initial-speed">Initial Speed (u):</label>
+          <input type="number" id="initial-speed" placeholder="Speed in m/s" required>
+          <label for="final-speed">Final Speed (v):</label>
+          <input type="number" id="final-speed" placeholder="Speed in m/s" required>
+          <label for="time-accel">Time (t):</label>
+          <input type="number" id="time-accel" placeholder="Time in seconds" required>
+        `;
+      } else if (selectedFormula === 'density') {
+        inputFields.innerHTML = `
+          <label for="mass">Mass (m):</label>
+          <input type="number" id="mass" placeholder="Mass in kg" required>
+          <label for="volume">Volume (V):</label>
+          <input type="number" id="volume" placeholder="Volume in m³" required>
+        `;
+      } else if (selectedFormula === 'power') {
+        inputFields.innerHTML = `
+          <label for="work">Work (W):</label>
+          <input type="number" id="work" placeholder="Work in Joules" required>
+          <label for="time-power">Time (t):</label>
+          <input type="number" id="time-power" placeholder="Time in seconds" required>
+        `;
+      } else if (selectedFormula === 'force') {
+        inputFields.innerHTML = `
+
+    
