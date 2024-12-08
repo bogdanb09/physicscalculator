@@ -1,4 +1,4 @@
-       <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -31,30 +31,6 @@
     }
     .container {
       margin: 20px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: center;
-    }
-    th {
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-    }
-    td {
-      background-color: #f2f2f2;
-    }
-    .form-container {
-      background-color: #fff;
-      padding: 20px;
-      margin-top: 30px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
     .calculator {
       background-color: #ff4081;
@@ -105,79 +81,6 @@
   </div>
 
   <div class="container">
-    <table id="formulas-table">
-      <thead>
-        <tr>
-          <th onclick="sortTable(0)">Name</th>
-          <th onclick="sortTable(1)">Symbol</th>
-          <th onclick="sortTable(2)">Unit</th>
-          <th onclick="sortTable(3)">Formula</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Average Speed</td>
-          <td>S</td>
-          <td>m/s</td>
-          <td>S = d / t</td>
-        </tr>
-        <tr>
-          <td>Acceleration</td>
-          <td>a</td>
-          <td>m/s²</td>
-          <td>a = (v - u) / t</td>
-        </tr>
-        <tr>
-          <td>Density</td>
-          <td>ρ</td>
-          <td>kg/m³</td>
-          <td>ρ = m / V</td>
-        </tr>
-        <tr>
-          <td>Power</td>
-          <td>P</td>
-          <td>W</td>
-          <td>P = W / t</td>
-        </tr>
-        <tr>
-          <td>Newton’s Second Law</td>
-          <td>F</td>
-          <td>N</td>
-          <td>F = m × a</td>
-        </tr>
-        <tr>
-          <td>Weight</td>
-          <td>W</td>
-          <td>kg·m/s² (N)</td>
-          <td>W = m × g</td>
-        </tr>
-        <tr>
-          <td>Pressure</td>
-          <td>P</td>
-          <td>Pa</td>
-          <td>P = F / A</td>
-        </tr>
-        <tr>
-          <td>Ohm’s Law</td>
-          <td>V</td>
-          <td>V</td>
-          <td>V = I × R</td>
-        </tr>
-        <tr>
-          <td>Kinetic Energy</td>
-          <td>K.E.</td>
-          <td>J</td>
-          <td>K.E. = ½ mv²</td>
-        </tr>
-        <tr>
-          <td>Frequency</td>
-          <td>F</td>
-          <td>Hz</td>
-          <td>F = v / λ</td>
-        </tr>
-      </tbody>
-    </table>
-
     <div class="calculator">
       <h2>Fun Calculator</h2>
       <select id="formula-select">
@@ -188,6 +91,7 @@
         <option value="force">Force (F = m × a)</option>
         <option value="weight">Weight (W = m × g)</option>
       </select>
+
       <div id="input-fields">
         <!-- Input fields will be dynamically generated here -->
       </div>
@@ -240,3 +144,71 @@
         `;
       } else if (selectedFormula === 'force') {
         inputFields.innerHTML = `
+          <label for="mass-force">Mass (m):</label>
+          <input type="number" id="mass-force" placeholder="Mass in kg" required>
+          <label for="acceleration-force">Acceleration (a):</label>
+          <input type="number" id="acceleration-force" placeholder="Acceleration in m/s²" required>
+        `;
+      } else if (selectedFormula === 'weight') {
+        inputFields.innerHTML = `
+          <label for="mass-weight">Mass (m):</label>
+          <input type="number" id="mass-weight" placeholder="Mass in kg" required>
+          <label for="gravity">Gravity (g):</label>
+          <input type="number" id="gravity" placeholder="Gravity in m/s²" required>
+        `;
+      }
+    }
+
+    function calculate() {
+      const selectedFormula = formulaSelect.value;
+      let result = 0;
+
+      if (selectedFormula === 'speed') {
+        const distance = parseFloat(document.getElementById("distance").value);
+        const time = parseFloat(document.getElementById("time").value);
+        if (!distance || !time) {
+          resultDiv.innerText = "Please fill in both distance and time!";
+          return;
+        }
+        result = distance / time;
+        resultDiv.innerText = `Speed (S) = ${result} m/s`;
+      } else if (selectedFormula === 'acceleration') {
+        const initialSpeed = parseFloat(document.getElementById("initial-speed").value);
+        const finalSpeed = parseFloat(document.getElementById("final-speed").value);
+        const time = parseFloat(document.getElementById("time-accel").value);
+        if (!initialSpeed || !finalSpeed || !time) {
+          resultDiv.innerText = "Please fill in all fields!";
+          return;
+        }
+        result = (finalSpeed - initialSpeed) / time;
+        resultDiv.innerText = `Acceleration (a) = ${result} m/s²`;
+      } else if (selectedFormula === 'density') {
+        const mass = parseFloat(document.getElementById("mass").value);
+        const volume = parseFloat(document.getElementById("volume").value);
+        if (!mass || !volume) {
+          resultDiv.innerText = "Please fill in both mass and volume!";
+          return;
+        }
+        result = mass / volume;
+        resultDiv.innerText = `Density (ρ) = ${result} kg/m³`;
+      } else if (selectedFormula === 'power') {
+        const work = parseFloat(document.getElementById("work").value);
+        const time = parseFloat(document.getElementById("time-power").value);
+        if (!work || !time) {
+          resultDiv.innerText = "Please fill in both work and time!";
+          return;
+        }
+        result = work / time;
+        resultDiv.innerText = `Power (P) = ${result} W`;
+      } else if (selectedFormula === 'force') {
+        const mass = parseFloat(document.getElementById("mass-force").value);
+        const acceleration = parseFloat(document.getElementById("acceleration-force").value);
+        if (!mass || !acceleration) {
+          resultDiv.innerText = "Please fill in both mass and acceleration!";
+          return;
+        }
+        result = mass * acceleration;
+        resultDiv.innerText = `Force (F) = ${result} N`;
+      } else if (selectedFormula === 'weight') {
+        const mass = parseFloat(document.getElementById("mass-weight").value);
+        const gravity
